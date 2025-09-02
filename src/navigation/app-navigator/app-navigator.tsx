@@ -24,6 +24,9 @@ export type RootStackParamList = {
   [ROUTES.LESSONS]: undefined;
   [ROUTES.LESSON_DETAIL]: { lessonId: string };
   [ROUTES.PRACTICE_DETAIL]: { problem: any };
+  [ROUTES.SORTING_VISUALIZER]: undefined;
+  [ROUTES.TREE_VISUALIZER]: undefined;
+  [ROUTES.GRAPH_VISUALIZER]: undefined;
 };
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
@@ -116,7 +119,7 @@ const AppNavigator: React.FC = () => {
             <Stack.Screen
               key={screen.name}
               name={screen.name}
-              component={component}
+              component={component as any}
               options={{
                 ...screen.options,
                 ...(screen.options.headerShown && {

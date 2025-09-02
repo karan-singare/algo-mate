@@ -28,6 +28,18 @@ export const styles = StyleSheet.create({
     marginBottom: SPACING.xlarge,
     marginTop: SPACING.medium,
   },
+  progressTitle: {
+    marginBottom: SPACING.medium,
+    fontWeight: 'bold',
+  },
+  progressContainer: {
+    marginBottom: SPACING.medium,
+  },
+  progressText: {
+    textAlign: 'center',
+    marginTop: SPACING.small,
+    color: '#8F9BB3',
+  },
   progressRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -41,6 +53,34 @@ export const styles = StyleSheet.create({
   streakIcon: {
     width: ICON_SIZES.small,
     height: ICON_SIZES.small,
+  },
+
+  // Continue Learning Card Styles
+  continueCard: {
+    marginHorizontal: SPACING.xlarge,
+    marginBottom: SPACING.xlarge,
+  },
+  continueContent: {
+    alignItems: 'center',
+    paddingVertical: SPACING.medium,
+  },
+  continueTitle: {
+    marginBottom: SPACING.small,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  continueDescription: {
+    textAlign: 'center',
+    marginBottom: SPACING.medium,
+    color: '#8F9BB3',
+  },
+  continueButton: {
+    borderRadius: BORDER_RADIUS.medium,
+  },
+  completedIcon: {
+    width: ICON_SIZES.large,
+    height: ICON_SIZES.large,
+    marginBottom: SPACING.small,
   },
 
   // Navigation Grid Styles

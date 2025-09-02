@@ -10,6 +10,7 @@ import {
 } from '@ui-kitten/components';
 import { TopicCard } from '@components';
 import { lessons } from '@data/lessons.data';
+import { useLessonProgress } from '@hooks';
 import { styles } from './lessons.styles';
 
 interface LessonsScreenProps {
@@ -21,6 +22,7 @@ const DIFFICULTY_OPTIONS = ['All', 'Beginner', 'Intermediate', 'Advanced'];
 const LessonsScreen: React.FC<LessonsScreenProps> = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDifficultyIndex, setSelectedDifficultyIndex] = useState(0);
+  const { isCompleted } = useLessonProgress();
 
   const filteredLessons = useMemo(() => {
     let filtered = lessons;
@@ -48,14 +50,29 @@ const LessonsScreen: React.FC<LessonsScreenProps> = ({ navigation }) => {
     navigation.navigate('LessonDetail', { lessonId: lesson.id });
   };
 
-  const renderLesson = ({ item }: { item: any }) => (
-    <TopicCard
-      title={item.title}
-      topic={item.topic}
-      difficulty={item.difficulty}
-      onPress={() => handleLessonPress(item)}
-    />
-  );
+  const renderLesson = ({ item }: { item: any }) => {
+    const completed = isCompleted(item.id);
+    
+    return (
+      <View style={styles.lessonCardContainer}>
+        <TopicCard
+          title={item.title}
+          topic={item.topic}
+          difficulty={item.difficulty}
+          onPress={() => handleLessonPress(item)}
+        />
+        {completed && (
+          <View style={styles.completedOverlay}>
+            <Icon 
+              name="checkmark-circle" 
+              style={styles.completedIcon}
+              fill="#4CAF50"
+            />
+          </View>
+        )}
+      </View>
+    );
+  };
 
   const renderEmptyState = () => (
     <View style={styles.emptyState}>

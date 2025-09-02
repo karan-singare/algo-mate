@@ -16,8 +16,7 @@ import SyntaxHighlighter from 'react-native-syntax-highlighter';
 // @ts-ignore
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { lessons } from '@data/lessons.data';
-import { useStorage } from '@hooks';
-import { STORAGE_KEYS } from '@constants/storage.constants';
+import { useLessonProgress } from '@hooks';
 import { styles } from './lesson-detail.styles';
 
 interface LessonDetailScreenProps {
@@ -33,16 +32,13 @@ const LessonDetailScreen: React.FC<LessonDetailScreenProps> = ({ navigation, rou
   const { lessonId } = route.params;
   const [selectedLanguageIndex, setSelectedLanguageIndex] = useState(0);
   
-  // Load completed lessons from storage
-  const { value: completedLessons, updateValue: updateCompletedLessons } = useStorage<string[]>(
-    STORAGE_KEYS.LESSONS_COMPLETED, 
-    []
-  );
+  // Use lesson progress hook
+  const { isCompleted, markLessonComplete } = useLessonProgress();
 
   // Find the lesson by ID
   const lesson = lessons.find(l => l.id === lessonId);
   
-  const isCompleted = completedLessons.includes(lessonId);
+  const lessonCompleted = isCompleted(lessonId);
   
   // Get available languages for code snippets
   const availableLanguages = lesson?.codeSnippets?.map(snippet => snippet.language) || [];
@@ -51,10 +47,9 @@ const LessonDetailScreen: React.FC<LessonDetailScreenProps> = ({ navigation, rou
   // Get current code snippet
   const currentSnippet = lesson?.codeSnippets?.[selectedLanguageIndex];
 
-  const handleMarkComplete = () => {
-    if (!isCompleted) {
-      const updatedCompleted = [...completedLessons, lessonId];
-      updateCompletedLessons(updatedCompleted);
+  const handleMarkComplete = async () => {
+    if (!lessonCompleted) {
+      await markLessonComplete(lessonId);
       Alert.alert('Success', 'Lesson marked as complete! 🎉');
     }
   };
@@ -129,7 +124,7 @@ const LessonDetailScreen: React.FC<LessonDetailScreenProps> = ({ navigation, rou
                 </Text>
               </View>
               
-              {isCompleted && (
+              {lessonCompleted && (
                 <View style={styles.completedBadge}>
                   <Icon name="checkmark-circle" style={styles.completedIcon} fill="#4CAF50" />
                   <Text category="c2" style={styles.completedBadgeText}>
@@ -215,17 +210,17 @@ const LessonDetailScreen: React.FC<LessonDetailScreenProps> = ({ navigation, rou
         <View style={styles.actionsContainer}>
           <Button
             style={styles.actionButton}
-            status={isCompleted ? 'basic' : 'success'}
-            disabled={isCompleted}
+            status={lessonCompleted ? 'basic' : 'success'}
+            disabled={lessonCompleted}
             onPress={handleMarkComplete}
             accessoryLeft={(props) => (
               <Icon 
                 {...props} 
-                name={isCompleted ? "checkmark-circle" : "checkmark-circle-outline"} 
+                name={lessonCompleted ? "checkmark-circle" : "checkmark-circle-outline"} 
               />
             )}
           >
-            {isCompleted ? 'Completed' : 'Mark as Complete'}
+            {lessonCompleted ? 'Completed' : 'Mark as Complete'}
           </Button>
           
           <Button

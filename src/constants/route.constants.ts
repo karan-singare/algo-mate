@@ -13,6 +13,9 @@ export const ROUTES = {
   LESSONS: 'Lessons',
   LESSON_DETAIL: 'LessonDetail',
   PRACTICE_DETAIL: 'PracticeDetail',
+  SORTING_VISUALIZER: 'SortingVisualizer',
+  TREE_VISUALIZER: 'TreeVisualizer',
+  GRAPH_VISUALIZER: 'GraphVisualizer',
 } as const;
 
 export type RouteName = typeof ROUTES[keyof typeof ROUTES];

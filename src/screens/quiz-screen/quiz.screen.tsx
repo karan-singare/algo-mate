@@ -7,8 +7,10 @@ import {
   Alert 
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Card } from '@ui-kitten/components';
 import { styles } from './quiz.styles';
 import { questions, Question } from '../../data/questions.data';
+import { useQuizProgress } from '@hooks';
 
 interface QuizScreenProps {
   navigation: any;
@@ -19,6 +21,8 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ navigation }) => {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [score, setScore] = useState(0);
+  const [quizStarted, setQuizStarted] = useState(false);
+  const { lastScore, saveScore } = useQuizProgress();
 
   const currentQuestion: Question = questions[currentQuestionIndex];
 
@@ -28,7 +32,7 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ navigation }) => {
     setSelectedAnswer(answerIndex);
     setShowResult(true);
     
-    if (answerIndex === currentQuestion.correctAnswer) {
+    if (answerIndex === currentQuestion.answerIndex) {
       setScore(score + 1);
     }
   };
@@ -40,9 +44,12 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ navigation }) => {
       setShowResult(false);
     } else {
       // Quiz completed
+      const finalScore = score + (selectedAnswer === currentQuestion.answerIndex ? 1 : 0);
+      saveScore(finalScore);
+      
       Alert.alert(
         'Quiz Completed!',
-        `Your score: ${score + (selectedAnswer === currentQuestion.correctAnswer ? 1 : 0)}/${questions.length}`,
+        `Your score: ${finalScore}/${questions.length}`,
         [
           {
             text: 'Restart Quiz',
@@ -51,6 +58,7 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ navigation }) => {
               setSelectedAnswer(null);
               setShowResult(false);
               setScore(0);
+              setQuizStarted(false);
             }
           }
         ]
@@ -63,9 +71,9 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ navigation }) => {
       return selectedAnswer === index ? styles.selectedOption : styles.option;
     }
     
-    if (index === currentQuestion.correctAnswer) {
+    if (index === currentQuestion.answerIndex) {
       return styles.correctOption;
-    } else if (index === selectedAnswer && index !== currentQuestion.correctAnswer) {
+    } else if (index === selectedAnswer && index !== currentQuestion.answerIndex) {
       return styles.incorrectOption;
     }
     
@@ -77,14 +85,54 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ navigation }) => {
       return selectedAnswer === index ? styles.selectedOptionText : styles.optionText;
     }
     
-    if (index === currentQuestion.correctAnswer) {
+    if (index === currentQuestion.answerIndex) {
       return styles.correctOptionText;
-    } else if (index === selectedAnswer && index !== currentQuestion.correctAnswer) {
+    } else if (index === selectedAnswer && index !== currentQuestion.answerIndex) {
       return styles.incorrectOptionText;
     }
     
     return styles.optionText;
   };
+
+  const startQuiz = () => {
+    setQuizStarted(true);
+    setCurrentQuestionIndex(0);
+    setSelectedAnswer(null);
+    setShowResult(false);
+    setScore(0);
+  };
+
+  if (!quizStarted) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.title}>MCQ Quiz</Text>
+        </View>
+        
+        <ScrollView style={styles.content} contentContainerStyle={styles.contentContainer}>
+          {lastScore > 0 && (
+            <Card style={styles.summaryCard}>
+              <Text style={styles.summaryTitle}>Last Quiz Score</Text>
+              <Text style={styles.summaryScore}>{lastScore}/{questions.length}</Text>
+              <Text style={styles.summaryPercentage}>
+                {Math.round((lastScore / questions.length) * 100)}% Correct
+              </Text>
+            </Card>
+          )}
+          
+          <View style={styles.startCard}>
+            <Text style={styles.startTitle}>Ready to Test Your Knowledge?</Text>
+            <Text style={styles.startDescription}>
+              Answer {questions.length} multiple choice questions about Data Structures and Algorithms.
+            </Text>
+            <TouchableOpacity style={styles.startButton} onPress={startQuiz}>
+              <Text style={styles.startButtonText}>Start Quiz</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -120,9 +168,11 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ navigation }) => {
         {showResult && (
           <View style={styles.resultCard}>
             <Text style={styles.resultTitle}>
-              {selectedAnswer === currentQuestion.correctAnswer ? 'Correct!' : 'Incorrect!'}
+              {selectedAnswer === currentQuestion.answerIndex ? 'Correct!' : 'Incorrect!'}
             </Text>
-            <Text style={styles.explanation}>{currentQuestion.explanation}</Text>
+            <Text style={styles.explanation}>
+              The correct answer is: {currentQuestion.options[currentQuestion.answerIndex]}
+            </Text>
             <TouchableOpacity style={styles.nextButton} onPress={handleNextQuestion}>
               <Text style={styles.nextButtonText}>
                 {currentQuestionIndex < questions.length - 1 ? 'Next Question' : 'Finish Quiz'}

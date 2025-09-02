@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,29 +8,35 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from './profile.styles';
-import { useUserProgress } from './profile.storage';
+import { StorageUtil } from '@utils/storage.util';
+import { useLessonProgress, useQuizProgress, usePracticeProgress } from '@hooks';
+import { lessons } from '@data/lessons.data';
+import { problems } from '@data/problems.data';
 
 interface ProfileScreenProps {
   navigation: any;
 }
 
 const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
-  const { progress, loading, updateProgress, resetProgress } = useUserProgress();
+  const { completedLessons } = useLessonProgress();
+  const { lastScore } = useQuizProgress();
+  const { solved } = usePracticeProgress();
+  const [refreshKey, setRefreshKey] = useState(0);
   
-  // Default stats if no progress is loaded
-  const userStats = progress || {
-    lessonsCompleted: 3,
-    problemsSolved: 1,
-    quizScore: 85,
-    totalLessons: 7,
-    totalProblems: 3,
-    totalQuizzes: 6,
+  // Calculate real stats from hooks
+  const userStats = {
+    lessonsCompleted: completedLessons.length,
+    problemsSolved: solved.length,
+    quizScore: lastScore > 0 ? Math.round((lastScore / 3) * 100) : 0, // Assuming 3 questions
+    totalLessons: lessons.length,
+    totalProblems: problems.length,
+    totalQuizzes: 1,
   };
 
   const handleResetProgress = () => {
     Alert.alert(
-      'Reset Progress',
-      'Are you sure you want to reset all your progress? This action cannot be undone.',
+      'Reset All Progress',
+      'Are you sure you want to reset all your progress? This will clear:\n• Completed lessons\n• Quiz scores\n• Solved problems\n\nThis action cannot be undone.',
       [
         {
           text: 'Cancel',
@@ -39,9 +45,21 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
         {
           text: 'Reset',
           style: 'destructive',
-          onPress: () => {
-            resetProgress();
-            Alert.alert('Progress Reset', 'Your progress has been reset successfully.');
+          onPress: async () => {
+            try {
+              // Clear all progress data
+              await StorageUtil.delete('completed_lessons');
+              await StorageUtil.delete('quiz_score');
+              await StorageUtil.delete('solved_problems');
+              
+              // Refresh UI by updating the refresh key
+              setRefreshKey(prev => prev + 1);
+              
+              Alert.alert('Progress Reset', 'All your progress has been reset successfully.');
+            } catch (error) {
+              console.error('Error resetting progress:', error);
+              Alert.alert('Error', 'Failed to reset progress. Please try again.');
+            }
           },
         },
       ]
@@ -169,7 +187,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
 
         {/* Reset Progress Button */}
         <TouchableOpacity style={styles.resetButton} onPress={handleResetProgress}>
-          <Text style={styles.resetButtonText}>Reset Progress</Text>
+          <Text style={styles.resetButtonText}>Reset All Progress</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

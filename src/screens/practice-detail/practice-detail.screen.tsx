@@ -10,6 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from './practice-detail.styles';
 import { Problem } from '../../data/problems.data';
+import { usePracticeProgress } from '@hooks';
 
 interface PracticeDetailScreenProps {
   navigation: any;
@@ -19,6 +20,27 @@ interface PracticeDetailScreenProps {
 const PracticeDetailScreen: React.FC<PracticeDetailScreenProps> = ({ navigation, route }) => {
   const { problem }: { problem: Problem } = route.params;
   const [solution, setSolution] = useState('');
+  const { isSolved, markSolved } = usePracticeProgress();
+
+  // Handle case where problem is not provided
+  if (!problem) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorTitle}>Problem Not Found</Text>
+          <Text style={styles.errorDescription}>
+            The requested problem could not be found.
+          </Text>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Text style={styles.backButtonText}>Go Back</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   const handleCheckSolution = () => {
     if (solution.trim() === '') {
@@ -31,6 +53,13 @@ const PracticeDetailScreen: React.FC<PracticeDetailScreenProps> = ({ navigation,
       'Solution checking functionality will be available in a future update!',
       [{ text: 'OK' }]
     );
+  };
+
+  const handleMarkSolved = async () => {
+    if (!isSolved(problem.id)) {
+      await markSolved(problem.id);
+      Alert.alert('Success', 'Problem marked as solved! 🎉');
+    }
   };
 
   const getDifficultyColor = (difficulty: string) => {
@@ -84,10 +113,28 @@ const PracticeDetailScreen: React.FC<PracticeDetailScreenProps> = ({ navigation,
           />
         </View>
 
-        {/* Check Solution Button */}
-        <TouchableOpacity style={styles.checkButton} onPress={handleCheckSolution}>
-          <Text style={styles.checkButtonText}>Check Solution</Text>
-        </TouchableOpacity>
+        {/* Action Buttons */}
+        <View style={styles.actionsContainer}>
+          <TouchableOpacity style={styles.actionButton} onPress={handleCheckSolution}>
+            <Text style={styles.actionButtonText}>Check Solution</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity 
+            style={[
+              styles.actionButton, 
+              isSolved(problem.id) ? styles.solvedButton : styles.markSolvedButton
+            ]} 
+            onPress={handleMarkSolved}
+            disabled={isSolved(problem.id)}
+          >
+            <Text style={[
+              styles.actionButtonText,
+              isSolved(problem.id) ? styles.solvedButtonText : styles.markSolvedButtonText
+            ]}>
+              {isSolved(problem.id) ? 'Solved ✅' : 'Mark Solved'}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

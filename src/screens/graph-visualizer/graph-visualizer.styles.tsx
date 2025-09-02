@@ -1,0 +1,158 @@
+import { StyleSheet } from 'react-native';
+
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  content: {
+    flex: 1,
+    padding: 16,
+  },
+  header: {
+    marginBottom: 24,
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  description: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    lineHeight: 22,
+  },
+  graphContainer: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 20,
+    marginBottom: 24,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    alignItems: 'center',
+  },
+  graph: {
+    backgroundColor: '#F8F9FA',
+    borderRadius: 8,
+  },
+  traversalInfo: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 20,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+  },
+  traversalDescription: {
+    fontSize: 16,
+    color: '#333',
+    textAlign: 'center',
+    marginBottom: 8,
+    lineHeight: 22,
+    fontWeight: '500',
+  },
+  stepCounter: {
+    fontSize: 14,
+    color: '#666',
+    textAlign: 'center',
+    fontFamily: 'monospace',
+    marginBottom: 8,
+  },
+  traversalOrder: {
+    fontSize: 14,
+    color: '#333',
+    textAlign: 'center',
+    fontFamily: 'monospace',
+    fontWeight: '600',
+    backgroundColor: '#E3F2FD',
+    padding: 8,
+    borderRadius: 6,
+  },
+  controls: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 16,
+    gap: 16,
+  },
+  button: {
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    alignItems: 'center',
+    minWidth: 100,
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#FFFFFF',
+  },
+  bfsButton: {
+    backgroundColor: '#4CAF50',
+  },
+  dfsButton: {
+    backgroundColor: '#2196F3',
+  },
+  resetContainer: {
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  resetButton: {
+    backgroundColor: '#F44336',
+    paddingHorizontal: 32,
+    paddingVertical: 12,
+    minWidth: 120,
+  },
+  algorithmInfo: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+  },
+  algorithmTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  algorithmDescription: {
+    fontSize: 14,
+    color: '#666',
+    lineHeight: 20,
+  },
+  bold: {
+    fontWeight: '600',
+    color: '#333',
+  },
+});

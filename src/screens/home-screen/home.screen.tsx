@@ -6,9 +6,13 @@ import {
   Text, 
   Card, 
   Icon,
+  Button,
   useTheme as useUIKittenTheme
 } from '@ui-kitten/components';
 import { useAppTheme } from '../../theme';
+import { useLessonProgress } from '@hooks';
+import { lessons } from '@data/lessons.data';
+import { ProgressBar } from '@components';
 import { styles } from './home.styles';
 import { COLORS, ROUTES } from '../../constants';
 
@@ -25,6 +29,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <WelcomeSection />
         <ProgressCard />
+        <ContinueLearningCard navigation={navigation} />
         <NavigationGrid menuItems={getMenuItems(navigation)} />
       </ScrollView>
     </SafeAreaView>
@@ -53,6 +58,21 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         icon: 'person-outline',
         onPress: () => navigation.navigate(ROUTES.PROFILE_TAB),
       },
+      {
+        title: 'Sorting Visualizer',
+        icon: 'bar-chart-outline',
+        onPress: () => navigation.navigate(ROUTES.SORTING_VISUALIZER),
+      },
+      {
+        title: 'Tree Visualizer',
+        icon: 'layers-outline',
+        onPress: () => navigation.navigate(ROUTES.TREE_VISUALIZER),
+      },
+      {
+        title: 'Graph Visualizer',
+        icon: 'share-outline',
+        onPress: () => navigation.navigate(ROUTES.GRAPH_VISUALIZER),
+      },
     ];
   }
 };
@@ -68,18 +88,69 @@ function WelcomeSection() {
 
 function ProgressCard() {
   const uiKittenTheme = useUIKittenTheme();
+  const { completedLessons } = useLessonProgress();
+  
+  const totalLessons = lessons.length;
+  const completed = completedLessons.length;
+  const progressPercentage = totalLessons > 0 ? (completed / totalLessons) * 100 : 0;
   
   return (
     <Card style={styles.progressCard}>
-      <View style={styles.progressRow}>
-        <Text category="s1">Lessons Completed</Text>
-        <Text category="h6" status="primary">3</Text>
+      <Text category="h6" style={styles.progressTitle}>Learning Progress</Text>
+      
+      <View style={styles.progressContainer}>
+        <ProgressBar value={completed} total={totalLessons} />
+        <Text category="s1" style={styles.progressText}>
+          {completed} of {totalLessons} Lessons Completed
+        </Text>
       </View>
+      
       <View style={styles.progressRow}>
         <Text category="s1">Streak</Text>
         <View style={styles.streakContainer}>
           <Icon name="flash-outline" fill={uiKittenTheme['color-warning-500']} style={styles.streakIcon} />
         </View>
+      </View>
+    </Card>
+  );
+}
+
+function ContinueLearningCard({ navigation }: { navigation: any }) {
+  const { completedLessons, isCompleted } = useLessonProgress();
+  
+  // Find the first lesson that's not completed
+  const nextLesson = lessons.find(lesson => !isCompleted(lesson.id));
+  
+  if (!nextLesson) {
+    // All lessons completed
+    return (
+      <Card style={styles.continueCard}>
+        <View style={styles.continueContent}>
+          <Icon name="checkmark-circle" style={styles.completedIcon} fill="#4CAF50" />
+          <Text category="h6" style={styles.continueTitle}>All Lessons Completed!</Text>
+          <Text category="s1" style={styles.continueDescription}>
+            Great job! You've completed all available lessons. Check back for new content soon!
+          </Text>
+        </View>
+      </Card>
+    );
+  }
+  
+  return (
+    <Card style={styles.continueCard}>
+      <View style={styles.continueContent}>
+        <Text category="h6" style={styles.continueTitle}>Continue Learning</Text>
+        <Text category="s1" style={styles.continueDescription}>
+          Next: {nextLesson.title}
+        </Text>
+        <Button
+          size="small"
+          status="primary"
+          onPress={() => navigation.navigate('LessonDetail', { lessonId: nextLesson.id })}
+          style={styles.continueButton}
+        >
+          Go to Lesson
+        </Button>
       </View>
     </Card>
   );

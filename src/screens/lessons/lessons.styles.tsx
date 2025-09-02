@@ -54,6 +54,22 @@ export const styles = StyleSheet.create({
   listContainer: {
     paddingBottom: 20,
   },
+  lessonCardContainer: {
+    position: 'relative',
+  },
+  completedOverlay: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    zIndex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 12,
+    padding: 4,
+  },
+  completedIcon: {
+    width: 20,
+    height: 20,
+  },
   emptyState: {
     flex: 1,
     alignItems: 'center',

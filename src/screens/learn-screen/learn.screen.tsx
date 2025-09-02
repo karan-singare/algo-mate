@@ -24,7 +24,7 @@ const topics = [
 
 const LearnScreen: React.FC<LearnScreenProps> = ({ navigation }) => {
   const handleTopicPress = (topic: any) => {
-    navigation.navigate('LessonDetail', { topic: topic.title });
+    navigation.navigate('Lessons');
   };
 
   const renderTopic = ({ item }: { item: any }) => (
