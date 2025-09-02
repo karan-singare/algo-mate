@@ -1,45 +1,44 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
+ * AlgoMate - Algorithm Learning Companion
+ * A React Native app for learning Data Structures and Algorithms
  *
  * @format
  */
 
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import React from 'react';
+import { StatusBar } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import * as eva from '@eva-design/eva';
+import { ThemeProvider, useAppTheme } from './src/theme';
+import { AppNavigator } from '@navigation';
+import { COLORS } from './src/constants';
 
-function App() {
-  const isDarkMode = useColorScheme() === 'dark';
+const AppContent: React.FC = () => {
+  const { themeName } = useAppTheme();
 
   return (
+    <ApplicationProvider {...eva} theme={eva[themeName]}>
+      <StatusBar 
+        barStyle="light-content" 
+        backgroundColor={COLORS.primary}
+        translucent={false}
+      />
+      <AppNavigator />
+    </ApplicationProvider>
+  );
+};
+
+function App(): React.JSX.Element {
+  return (
     <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <AppContent />
+      <IconRegistry icons={EvaIconsPack} />
+      <ThemeProvider>
+        <AppContent />
+      </ThemeProvider>
     </SafeAreaProvider>
   );
 }
-
-function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
-
-  return (
-    <View style={styles.container}>
-      <NewAppScreen
-        templateFileName="App.tsx"
-        safeAreaInsets={safeAreaInsets}
-      />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export default App;
