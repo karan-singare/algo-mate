@@ -176,4 +176,96 @@ export const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 12,
   },
+
+  // Modal Styles
+  modalBackdrop: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modal: {
+    width: '90%',
+    maxHeight: '80%',
+  },
+  modalCard: {
+    borderRadius: 16,
+    padding: 0,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E4E9F2',
+  },
+  modalTitle: {
+    fontWeight: 'bold',
+    color: '#222B45',
+  },
+  modalContent: {
+    padding: 20,
+  },
+  modalSubtitle: {
+    color: '#8F9BB3',
+    marginBottom: 16,
+    lineHeight: 20,
+  },
+  questionInput: {
+    marginBottom: 16,
+  },
+  inputText: {
+    minHeight: 80,
+    textAlignVertical: 'top',
+  },
+  loadingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 16,
+    marginBottom: 16,
+  },
+  loadingText: {
+    marginLeft: 8,
+    color: '#8F9BB3',
+  },
+  responseContainer: {
+    backgroundColor: '#F7F9FC',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    borderLeftWidth: 4,
+    borderLeftColor: '#3366FF',
+    maxHeight: 300,
+  },
+  responseHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  responseLabel: {
+    fontWeight: 'bold',
+    color: '#222B45',
+  },
+  responseScrollView: {
+    maxHeight: 200,
+  },
+  responseText: {
+    color: '#222B45',
+    lineHeight: 22,
+  },
+  typingIndicator: {
+    color: '#3366FF',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  modalActions: {
+    flexDirection: 'row',
+    gap: 12,
+    justifyContent: 'flex-end',
+  },
+  modalButton: {
+    minWidth: 100,
+    borderRadius: 8,
+  },
 });

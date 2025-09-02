@@ -8,9 +8,16 @@ import {
   Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { 
+  Modal, 
+  Card, 
+  Button, 
+  Icon, 
+  Spinner 
+} from '@ui-kitten/components';
 import { styles } from './practice-detail.styles';
-import { Problem } from '../../data/problems.data';
-import { usePracticeProgress } from '@hooks';
+import { Problem } from '@data';
+import { usePracticeProgress, useTutor } from '@hooks';
 
 interface PracticeDetailScreenProps {
   navigation: any;
@@ -20,7 +27,9 @@ interface PracticeDetailScreenProps {
 const PracticeDetailScreen: React.FC<PracticeDetailScreenProps> = ({ navigation, route }) => {
   const { problem }: { problem: Problem } = route.params;
   const [solution, setSolution] = useState('');
+  const [hintModalVisible, setHintModalVisible] = useState(false);
   const { isSolved, markSolved } = usePracticeProgress();
+  const { askTutor, response, loading, clearResponse, cancelGeneration, cancelled } = useTutor();
 
   // Handle case where problem is not provided
   if (!problem) {
@@ -60,6 +69,19 @@ const PracticeDetailScreen: React.FC<PracticeDetailScreenProps> = ({ navigation,
       await markSolved(problem.id);
       Alert.alert('Success', 'Problem marked as solved! 🎉');
     }
+  };
+
+  const handleGetHint = async () => {
+    setHintModalVisible(true);
+    clearResponse(); // Clear any previous response
+    
+    const hintPrompt = `Give a hint for solving: ${problem.statement}`;
+    await askTutor(hintPrompt);
+  };
+
+  const handleCloseHintModal = () => {
+    setHintModalVisible(false);
+    clearResponse();
   };
 
   const getDifficultyColor = (difficulty: string) => {
@@ -120,6 +142,16 @@ const PracticeDetailScreen: React.FC<PracticeDetailScreenProps> = ({ navigation,
           </TouchableOpacity>
           
           <TouchableOpacity 
+            style={[styles.actionButton, styles.hintButton]} 
+            onPress={handleGetHint}
+            disabled={loading}
+          >
+            <Text style={styles.hintButtonText}>
+              {loading ? 'Getting Hint...' : 'Get Hint'}
+            </Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity 
             style={[
               styles.actionButton, 
               isSolved(problem.id) ? styles.solvedButton : styles.markSolvedButton
@@ -136,6 +168,76 @@ const PracticeDetailScreen: React.FC<PracticeDetailScreenProps> = ({ navigation,
           </TouchableOpacity>
         </View>
       </ScrollView>
+
+      {/* Hint Modal */}
+      <Modal
+        visible={hintModalVisible}
+        backdropStyle={styles.modalBackdrop}
+        onBackdropPress={handleCloseHintModal}
+        style={styles.modal}
+      >
+        <Card style={styles.modalCard}>
+          <View style={styles.modalHeader}>
+            <Text style={styles.modalTitle}>
+              💡 AI Hint
+            </Text>
+            <Button
+              appearance="ghost"
+              size="small"
+              onPress={handleCloseHintModal}
+              accessoryLeft={(props) => <Icon {...props} name="close-outline" />}
+            />
+          </View>
+
+          <View style={styles.modalContent}>
+            {loading && !response && (
+              <View style={styles.loadingContainer}>
+                <Spinner size="small" />
+                <Text style={styles.loadingText}>
+                  AI is analyzing the problem...
+                </Text>
+              </View>
+            )}
+
+            {response && (
+              <View style={styles.hintContainer}>
+                <View style={styles.hintHeader}>
+                  <Text style={styles.hintLabel}>
+                    Here's a hint to help you solve this problem:
+                  </Text>
+                  {loading && (
+                    <Button
+                      size="tiny"
+                      status="danger"
+                      onPress={cancelGeneration}
+                      accessoryLeft={(props) => <Icon {...props} name="stop-circle-outline" />}
+                    >
+                      Stop
+                    </Button>
+                  )}
+                </View>
+                <ScrollView style={styles.hintScrollView} nestedScrollEnabled={true}>
+                  <Text style={styles.hintText}>
+                    {response}
+                    {loading && <Text style={styles.typingIndicator}>▋</Text>}
+                  </Text>
+                </ScrollView>
+              </View>
+            )}
+
+            <View style={styles.modalActions}>
+              <Button
+                style={styles.modalButton}
+                status="basic"
+                onPress={handleCloseHintModal}
+                disabled={loading}
+              >
+                Close
+              </Button>
+            </View>
+          </View>
+        </Card>
+      </Modal>
     </SafeAreaView>
   );
 };

@@ -7,10 +7,10 @@ import {
   Alert 
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Card } from '@ui-kitten/components';
+import { Card, Spinner } from '@ui-kitten/components';
 import { styles } from './quiz.styles';
-import { questions, Question } from '../../data/questions.data';
-import { useQuizProgress } from '@hooks';
+import { questions, Question } from '@data';
+import { useQuizProgress, useTutor } from '@hooks';
 
 interface QuizScreenProps {
   navigation: any;
@@ -23,10 +23,11 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ navigation }) => {
   const [score, setScore] = useState(0);
   const [quizStarted, setQuizStarted] = useState(false);
   const { lastScore, saveScore } = useQuizProgress();
+  const { askTutor, response, loading, clearResponse } = useTutor();
 
   const currentQuestion: Question = questions[currentQuestionIndex];
 
-  const handleAnswerSelect = (answerIndex: number) => {
+  const handleAnswerSelect = async (answerIndex: number) => {
     if (showResult) return;
     
     setSelectedAnswer(answerIndex);
@@ -35,6 +36,12 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ navigation }) => {
     if (answerIndex === currentQuestion.answerIndex) {
       setScore(score + 1);
     }
+
+    // Request AI explanation for the correct answer
+    clearResponse(); // Clear any previous response
+    const correctAnswer = currentQuestion.options[currentQuestion.answerIndex];
+    const explanationPrompt = `Explain why the correct answer to this question is "${correctAnswer}". Question: ${currentQuestion.question}. Options: ${currentQuestion.options.join(', ')}. Topic: ${currentQuestion.topic}`;
+    await askTutor(explanationPrompt);
   };
 
   const handleNextQuestion = () => {
@@ -42,6 +49,7 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ navigation }) => {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedAnswer(null);
       setShowResult(false);
+      clearResponse(); // Clear AI explanation for next question
     } else {
       // Quiz completed
       const finalScore = score + (selectedAnswer === currentQuestion.answerIndex ? 1 : 0);
@@ -59,6 +67,7 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ navigation }) => {
               setShowResult(false);
               setScore(0);
               setQuizStarted(false);
+              clearResponse(); // Clear AI explanation when restarting
             }
           }
         ]
@@ -173,6 +182,29 @@ const QuizScreen: React.FC<QuizScreenProps> = ({ navigation }) => {
             <Text style={styles.explanation}>
               The correct answer is: {currentQuestion.options[currentQuestion.answerIndex]}
             </Text>
+            
+            {/* AI Explanation Section */}
+            <View style={styles.aiExplanationContainer}>
+              <Text style={styles.aiExplanationTitle}>🤖 AI Explanation</Text>
+              
+              {loading && (
+                <View style={styles.loadingContainer}>
+                  <Spinner size="small" />
+                  <Text style={styles.loadingText}>
+                    AI is analyzing the question...
+                  </Text>
+                </View>
+              )}
+              
+              {response && (
+                <View style={styles.aiExplanationBox}>
+                  <Text style={styles.aiExplanationText}>
+                    {response}
+                  </Text>
+                </View>
+              )}
+            </View>
+            
             <TouchableOpacity style={styles.nextButton} onPress={handleNextQuestion}>
               <Text style={styles.nextButtonText}>
                 {currentQuestionIndex < questions.length - 1 ? 'Next Question' : 'Finish Quiz'}

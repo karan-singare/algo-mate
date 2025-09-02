@@ -17,7 +17,10 @@ const config = {
       '@navigation': path.resolve(__dirname, 'src/navigation'),
       '@constants': path.resolve(__dirname, 'src/constants'),
       '@hooks': path.resolve(__dirname, 'src/hooks'),
+      '@services': path.resolve(__dirname, 'src/services'),
+      '@assets': path.resolve(__dirname, 'assets'),
     },
+    assetExts: ['onnx', 'data', 'json', 'model', 'bin', 'txt', 'png', 'jpg', 'jpeg', 'gif', 'svg'],
   },
 };
 

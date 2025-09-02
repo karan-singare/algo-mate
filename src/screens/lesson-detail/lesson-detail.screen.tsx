@@ -9,14 +9,17 @@ import {
   ButtonGroup,
   Icon,
   List,
-  Divider
+  Divider,
+  Modal,
+  Input,
+  Spinner
 } from '@ui-kitten/components';
 // @ts-ignore
 import SyntaxHighlighter from 'react-native-syntax-highlighter';
 // @ts-ignore
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import { lessons } from '@data/lessons.data';
-import { useLessonProgress } from '@hooks';
+import { lessons } from '@data';
+import { useLessonProgress, useTutor } from '@hooks';
 import { styles } from './lesson-detail.styles';
 
 interface LessonDetailScreenProps {
@@ -31,9 +34,14 @@ interface LessonDetailScreenProps {
 const LessonDetailScreen: React.FC<LessonDetailScreenProps> = ({ navigation, route }) => {
   const { lessonId } = route.params;
   const [selectedLanguageIndex, setSelectedLanguageIndex] = useState(0);
+  const [tutorModalVisible, setTutorModalVisible] = useState(false);
+  const [question, setQuestion] = useState('');
   
   // Use lesson progress hook
   const { isCompleted, markLessonComplete } = useLessonProgress();
+  
+  // Use tutor hook
+  const { askTutor, response, loading, clearResponse, cancelGeneration, cancelled } = useTutor();
 
   // Find the lesson by ID
   const lesson = lessons.find(l => l.id === lessonId);
@@ -55,11 +63,23 @@ const LessonDetailScreen: React.FC<LessonDetailScreenProps> = ({ navigation, rou
   };
 
   const handleAskTutor = () => {
-    Alert.alert(
-      'AI Integration Coming Soon',
-      'The AI tutor feature will be available in Phase 3. Stay tuned for interactive learning with AI assistance!',
-      [{ text: 'OK', style: 'default' }]
-    );
+    setTutorModalVisible(true);
+    clearResponse(); // Clear any previous response
+  };
+
+  const handleSubmitQuestion = async () => {
+    if (!question.trim()) {
+      Alert.alert('Error', 'Please enter a question.');
+      return;
+    }
+    
+    await askTutor(question);
+  };
+
+  const handleCloseModal = () => {
+    setTutorModalVisible(false);
+    setQuestion('');
+    clearResponse();
   };
 
   const getDifficultyColor = (difficulty: string) => {
@@ -235,6 +255,99 @@ const LessonDetailScreen: React.FC<LessonDetailScreenProps> = ({ navigation, rou
           </Button>
         </View>
       </ScrollView>
+
+      {/* Tutor Modal */}
+      <Modal
+        visible={tutorModalVisible}
+        backdropStyle={styles.modalBackdrop}
+        onBackdropPress={handleCloseModal}
+        style={styles.modal}
+      >
+        <Card style={styles.modalCard}>
+          <View style={styles.modalHeader}>
+            <Text category="h6" style={styles.modalTitle}>
+              Ask AI Tutor
+            </Text>
+            <Button
+              appearance="ghost"
+              size="small"
+              onPress={handleCloseModal}
+              accessoryLeft={(props) => <Icon {...props} name="close-outline" />}
+            />
+          </View>
+
+          <View style={styles.modalContent}>
+            <Text category="s1" style={styles.modalSubtitle}>
+              Ask any question about this lesson:
+            </Text>
+            
+            <Input
+              style={styles.questionInput}
+              placeholder="What would you like to know?"
+              value={question}
+              onChangeText={setQuestion}
+              multiline={true}
+              textStyle={styles.inputText}
+              disabled={loading}
+            />
+
+            {loading && !response && (
+              <View style={styles.loadingContainer}>
+                <Spinner size="small" />
+                <Text category="c1" style={styles.loadingText}>
+                  AI is thinking...
+                </Text>
+              </View>
+            )}
+
+            {response && (
+              <View style={styles.responseContainer}>
+                <View style={styles.responseHeader}>
+                  <Text category="s2" style={styles.responseLabel}>
+                    AI Response:
+                  </Text>
+                  {loading && (
+                    <Button
+                      size="tiny"
+                      status="danger"
+                      onPress={cancelGeneration}
+                      accessoryLeft={(props) => <Icon {...props} name="stop-circle-outline" />}
+                    >
+                      Stop
+                    </Button>
+                  )}
+                </View>
+                <ScrollView style={styles.responseScrollView} nestedScrollEnabled={true}>
+                  <Text category="s1" style={styles.responseText}>
+                    {response}
+                    {loading && <Text style={styles.typingIndicator}>▋</Text>}
+                  </Text>
+                </ScrollView>
+              </View>
+            )}
+
+            <View style={styles.modalActions}>
+              <Button
+                style={styles.modalButton}
+                status="basic"
+                onPress={handleCloseModal}
+                disabled={loading}
+              >
+                Close
+              </Button>
+              <Button
+                style={styles.modalButton}
+                status="primary"
+                onPress={handleSubmitQuestion}
+                disabled={loading || !question.trim()}
+                accessoryLeft={loading ? (props) => <Spinner {...props} size="small" /> : undefined}
+              >
+                {loading ? 'Asking...' : 'Ask Question'}
+              </Button>
+            </View>
+          </View>
+        </Card>
+      </Modal>
     </SafeAreaView>
   );
 };

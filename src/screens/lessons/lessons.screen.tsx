@@ -9,7 +9,7 @@ import {
   Icon
 } from '@ui-kitten/components';
 import { TopicCard } from '@components';
-import { lessons } from '@data/lessons.data';
+import { lessons } from '@data';
 import { useLessonProgress } from '@hooks';
 import { styles } from './lessons.styles';
 
@@ -123,7 +123,6 @@ const LessonsScreen: React.FC<LessonsScreenProps> = ({ navigation }) => {
           </Text>
           <ButtonGroup
             style={styles.difficultyFilter}
-            selectedIndex={selectedDifficultyIndex}
             onSelect={setSelectedDifficultyIndex}
           >
             {DIFFICULTY_OPTIONS.map((option) => (

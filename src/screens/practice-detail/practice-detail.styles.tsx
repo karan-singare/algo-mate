@@ -179,6 +179,97 @@ export const styles = StyleSheet.create({
   solvedButtonText: {
     color: '#666666',
   },
+  hintButton: {
+    backgroundColor: '#FF9800',
+  },
+  hintButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  
+  // Modal Styles
+  modalBackdrop: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modal: {
+    width: '90%',
+    maxHeight: '70%',
+  },
+  modalCard: {
+    borderRadius: 16,
+    padding: 0,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E4E9F2',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#222B45',
+  },
+  modalContent: {
+    padding: 20,
+  },
+  loadingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 20,
+  },
+  loadingText: {
+    marginLeft: 8,
+    fontSize: 14,
+    color: '#8F9BB3',
+  },
+  hintContainer: {
+    backgroundColor: '#FFF3E0',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    borderLeftWidth: 4,
+    borderLeftColor: '#FF9800',
+    maxHeight: 300,
+  },
+  hintHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  hintLabel: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#E65100',
+    flex: 1,
+  },
+  hintScrollView: {
+    maxHeight: 200,
+  },
+  hintText: {
+    fontSize: 16,
+    color: '#222B45',
+    lineHeight: 22,
+  },
+  typingIndicator: {
+    color: '#FF9800',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  modalActions: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  modalButton: {
+    minWidth: 100,
+    borderRadius: 8,
+  },
   
   // Error Handling Styles
   errorContainer: {

@@ -11,7 +11,7 @@ import {
 } from '@ui-kitten/components';
 import { useAppTheme } from '../../theme';
 import { useLessonProgress } from '@hooks';
-import { lessons } from '@data/lessons.data';
+import { lessons } from '@data';
 import { ProgressBar } from '@components';
 import { styles } from './home.styles';
 import { COLORS, ROUTES } from '../../constants';

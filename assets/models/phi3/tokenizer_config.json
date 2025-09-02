@@ -1,0 +1,18 @@
+{
+  "tokenizer_class": "PreTrainedTokenizerFast",
+  "auto_map": {
+    "AutoTokenizer": [
+      "tokenizer.json"
+    ]
+  },
+  "model_max_length": 4096,
+  "padding_side": "right",
+  "truncation_side": "right",
+  "chat_template": null,
+  "clean_up_tokenization_spaces": true,
+  "model_input_names": [
+    "input_ids",
+    "attention_mask"
+  ],
+  "fast_tokenizer_file": "tokenizer.json"
+}

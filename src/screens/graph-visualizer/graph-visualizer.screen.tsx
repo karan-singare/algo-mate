@@ -47,7 +47,7 @@ const GraphVisualizerScreen: React.FC<GraphVisualizerScreenProps> = ({ navigatio
   const [totalSteps, setTotalSteps] = useState(0);
   const [traversalType, setTraversalType] = useState<string>('');
   
-  const animationRef = useRef<NodeJS.Timeout | null>(null);
+  const animationRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const traversalStepsRef = useRef<number[]>([]);
 
   // Graph layout configuration

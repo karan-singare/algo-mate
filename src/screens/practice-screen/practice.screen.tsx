@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from './practice.styles';
-import { problems, Problem } from '../../data/problems.data';
+import { problems, Problem } from '@data';
 
 interface PracticeScreenProps {
   navigation: any;

@@ -21,7 +21,6 @@ export const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#3366FF',
     borderRadius: 3,
-    transition: 'width 0.3s ease',
   },
   progressText: {
     color: '#8F9BB3',

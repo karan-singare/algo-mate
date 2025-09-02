@@ -179,6 +179,41 @@ export const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
+  
+  // AI Explanation Styles
+  aiExplanationContainer: {
+    marginBottom: 20,
+  },
+  aiExplanationTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  loadingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 16,
+  },
+  loadingText: {
+    marginLeft: 8,
+    fontSize: 14,
+    color: '#666',
+  },
+  aiExplanationBox: {
+    backgroundColor: '#F0F8FF',
+    borderRadius: 12,
+    padding: 16,
+    borderLeftWidth: 4,
+    borderLeftColor: '#007AFF',
+  },
+  aiExplanationText: {
+    fontSize: 15,
+    color: '#333',
+    lineHeight: 22,
+  },
   nextButton: {
     backgroundColor: '#007AFF',
     padding: 16,

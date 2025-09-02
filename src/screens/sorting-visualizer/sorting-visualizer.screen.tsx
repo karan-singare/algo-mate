@@ -49,7 +49,7 @@ const SortingVisualizerScreen: React.FC<SortingVisualizerScreenProps> = ({ navig
   const [selectedAlgorithm, setSelectedAlgorithm] = useState<SortingAlgorithm>('bubble');
   const [selectedIndex, setSelectedIndex] = useState(new IndexPath(0));
   
-  const animationRef = useRef<NodeJS.Timeout | null>(null);
+  const animationRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const stepsRef = useRef<Array<{ array: number[]; highlight: number[]; description: string }>>([]);
 
   // Generate bubble sort steps

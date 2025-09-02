@@ -10,8 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from './profile.styles';
 import { StorageUtil } from '@utils/storage.util';
 import { useLessonProgress, useQuizProgress, usePracticeProgress } from '@hooks';
-import { lessons } from '@data/lessons.data';
-import { problems } from '@data/problems.data';
+import { lessons, problems } from '@data';
 
 interface ProfileScreenProps {
   navigation: any;

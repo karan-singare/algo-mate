@@ -140,6 +140,15 @@ export const StorageUtil = {
       return [];
     }
   },
+
+  // Generic operations (for backward compatibility)
+  setItem: async (key: string, value: string): Promise<void> => {
+    return StorageUtil.setString(key, value);
+  },
+
+  getItem: async (key: string): Promise<string | null> => {
+    return StorageUtil.getString(key);
+  },
 };
 
 

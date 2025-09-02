@@ -20,4 +20,8 @@ export const STORAGE_KEYS = {
   APP_VERSION: 'app_version',
   FIRST_LAUNCH: 'first_launch',
   ONBOARDING_COMPLETED: 'onboarding_completed',
+  
+  // Model management
+  MODEL_COPIED: 'model_copied_to_documents',
+  MODEL_PATH: 'model_local_path',
 } as const;
