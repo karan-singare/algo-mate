@@ -68,8 +68,8 @@ src/
 
 1. Clone the repo:
    ```bash
-   git clone https://github.com/your-username/algomate.git
-   cd algomate
+   git clone https://github.com/karan-singare/algo-mate.git
+   cd algo-mate
    ```
 
 2. Install dependencies:

@@ -3,6 +3,14 @@
   "version": "0.0.1",
   "description": "An AI-powered mobile app for learning algorithms and data structures with interactive visualizations, practice problems, and personalized tutoring",
   "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/karan-singare/algo-mate.git"
+  },
+  "homepage": "https://github.com/karan-singare/algo-mate#readme",
+  "bugs": {
+    "url": "https://github.com/karan-singare/algo-mate/issues"
+  },
   "onnxruntimeExtensionsEnabled": "true",
   "scripts": {
     "android": "react-native run-android",
