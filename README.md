@@ -1,97 +1,144 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# 📘 AlgoMate
 
-# Getting Started
+🚀 **AlgoMate** is an **AI-powered learning companion** for mastering **Data Structures & Algorithms**.  
+It combines structured lessons, interactive quizzes, algorithm visualizations, and an **on-device AI tutor** — all in one mobile app.  
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+---
 
-## Step 1: Start Metro
+## ✨ Features
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+- 📚 **Structured Lessons**  
+  - Beginner → Advanced topics  
+  - Progress tracking (AsyncStorage)  
+  - “Mark as complete” for each lesson  
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+- 📝 **Practice Problems**  
+  - Solve coding-style problems inside the app  
+  - Save answers locally  
+  - Get **AI-powered hints**  
 
-```sh
-# Using npm
-npm start
+- ❓ **Quizzes**  
+  - Multiple-choice questions per topic  
+  - Track scores  
+  - AI explanations for answers  
 
-# OR using Yarn
-yarn start
+- 🎨 **Algorithm Visualizations**  
+  - Sorting visualizer (Bubble, Insertion, Selection)  
+  - Tree traversal visualizer  
+  - (Graph traversal coming soon)  
+
+- 🤖 **AI Tutor**  
+  - Powered by **Phi-3-mini ONNX model** (quantized for mobile)  
+  - Ask questions directly in lessons  
+  - AI-generated hints for practice problems  
+  - Streaming responses for a ChatGPT-like experience  
+
+- 🌙 **Theming**  
+  - Dark/Light mode with persistence  
+
+---
+
+## 🛠️ Tech Stack
+
+- **React Native** (bare workflow)  
+- **UI Kitten** (Eva Design System)  
+- **AsyncStorage** for persistence  
+- **react-native-svg** for visualizations  
+- **onnxruntime-react-native** for on-device AI inference  
+- **@xenova/transformers** for tokenizer  
+
+---
+
+## 📂 Project Structure
+
+```
+src/
+  @components/     # Reusable UI components
+  @screens/        # Screens (home, lessons, practice, quiz, visualizers)
+  @data/           # Lessons, problems, quizzes
+  @hooks/          # Feature-specific hooks (progress, tutor, etc.)
+  @services/       # AI service layer (onnxruntime, tokenizer)
+  @theme/          # Theming setup (light/dark)
+  @utils/          # Generic utils (storage wrapper, helpers)
 ```
 
-## Step 2: Build and run your app
+---
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+## 🚀 Getting Started
 
-### Android
+1. Clone the repo:
+   ```bash
+   git clone https://github.com/your-username/algomate.git
+   cd algomate
+   ```
 
-```sh
-# Using npm
-npm run android
+2. Install dependencies:
+   ```bash
+   yarn install
+   ```
 
-# OR using Yarn
-yarn android
-```
+3. Install pods (iOS only):
+   ```bash
+   cd ios && pod install && cd ..
+   ```
 
-### iOS
+4. Start Metro bundler:
+   ```bash
+   yarn start
+   ```
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+5. Run the app:
+   ```bash
+   yarn android   # or yarn ios
+   ```
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+---
 
-```sh
-bundle install
-```
+## 📦 Models & Tokenizer
 
-Then, and every time you update your native dependencies, run:
+- Download **Phi-3-mini-4K-Instruct ONNX (int4, acc-level-4)** from Hugging Face.  
+- Place in:
+  ```
+  assets/models/phi3/
+  ```
+- Files required:
+  - `.onnx`, `.onnx.data`
+  - `tokenizer.json`, `tokenizer_config.json`
+  - `tokenizer.model`, `special_tokens_map.json`, `added_tokens.json`
 
-```sh
-bundle exec pod install
-```
+---
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+<!-- ## 📸 Demo
 
-```sh
-# Using npm
-npm run ios
+Here's a glimpse of **AlgoMate in action** 👇  
 
-# OR using Yarn
-yarn ios
-```
+| Feature                | Screenshot |
+|-------------------------|------------|
+| Home Screen + Progress  | ![Home Screen](./docs/images/home.png) |
+| Lesson Detail + Tutor   | ![Lesson Tutor](./docs/images/lesson-tutor.png) |
+| Sorting Visualizer      | ![Sorting](./docs/images/sorting.png) |
+| Practice Problem + Hint | ![Practice](./docs/images/practice.png) |
+| Quiz + AI Explanation   | ![Quiz](./docs/images/quiz.png) |
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+> 📌 Place your screenshots under `docs/images/` and update paths above.  
+> You can also embed screen recordings (GIFs or mp4) for visualizers and tutor streaming. -->
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+---
 
-## Step 3: Modify your app
+## 🗺️ Roadmap
 
-Now that you have successfully run the app, let's make changes!
+- [x] Lessons + progress tracking  
+- [x] Practice problems + AI hints  
+- [x] Quizzes + AI explanations  
+- [x] Sorting & tree visualizers  
+- [x] On-device AI tutor (Phi-3-mini ONNX)  
+- [ ] **Interview Mode** (AI asks + evaluates DSA questions)  
+- [ ] **Gamification** (XP, streaks, badges)  
+- [ ] **Graph visualizer** (DFS, BFS)  
+- [ ] **Cloud sync** (save progress across devices)  
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+---
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+## 📜 License
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+MIT License. See [LICENSE](LICENSE) for details.  
